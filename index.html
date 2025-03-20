@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Catholic Hymns Library</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="Catholic Hymns Library - Browse, search and download Catholic hymns" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      // Immediately apply theme on page load to prevent flash
+      (function() {
+        const theme = localStorage.getItem('theme') || 'light';
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (theme === 'dark' || (!theme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1f2937');
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#ffffff');
+        }
+      })();
+    </script>
+  </head>
+  <body class="h-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div id="root" class="h-full"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Error recovery script -->
+    <script>
+      window.addEventListener('error', function(e) {
+        // Detect Vite-related errors
+        if (e.message && (
+          e.message.includes('Vite') || 
+          e.message.includes('module') || 
+          e.message.includes('connection')
+        )) {
+          console.log('Detected potential HMR issue, attempting recovery...');
+          
+          // Add recovery code
+          const recoveryAttempt = localStorage.getItem('vite-recovery-attempt');
+          if (!recoveryAttempt || (Date.now() - parseInt(recoveryAttempt)) > 10000) {
+            localStorage.setItem('vite-recovery-attempt', Date.now().toString());
+            
+            // Clear service worker if present
+            if ('serviceWorker' in navigator) {
+              navigator.serviceWorker.getRegistrations().then(registrations => {
+                registrations.forEach(registration => {
+                  registration.unregister();
+                  console.log('Unregistered service worker');
+                });
+              });
+            }
+            
+            // Clear cache and reload
+            window.location.reload(true);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

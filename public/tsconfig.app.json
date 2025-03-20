@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true // Make sure this is true when using allowImportingTsExtensions
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

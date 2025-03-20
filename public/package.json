@@ -1,0 +1,70 @@
+{
+  "name": "catholic-hymns-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --force",
+    "dev:fix": "node scripts/dev-server.js",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean-node-modules": "rm -rf node_modules/.vite",
+    "diagnostic": "vite --debug",
+    "serve": "vite preview --port 5173",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test": "vitest",
+    "start": "react-scripts start",
+    "check-env": "node -e \"console.log('Environment variables: ' + (process.env.VITE_SUPABASE_URL ? 'VITE_SUPABASE_URL is set' : 'VITE_SUPABASE_URL is missing') + (process.env.VITE_SUPABASE_ANON_KEY ? ', VITE_SUPABASE_ANON_KEY is set' : ', VITE_SUPABASE_ANON_KEY is missing'))\"",
+    "clean": "rimraf node_modules/.vite dist",
+    "reset": "npm run clean && npm install && npm run dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.7",
+    "@tanstack/react-query": "^5.24.1",
+    "date-fns": "^3.3.1",
+    "dompurify": "^3.2.4",
+    "lucide-react": "^0.344.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-error-boundary": "^4.0.12",
+    "react-markdown": "^9.0.1",
+    "react-pdf": "^9.2.1",
+    "react-query": "^3.39.3",
+    "react-router-dom": "^6.22.2",
+    "react-scripts": "^5.0.1",
+    "zod": "^3.22.4",
+    "zustand": "^4.5.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "@types/react-pdf": "^5.0.7",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^4.9.5",
+    "vite": "^6.2.1",
+    "vitest": "^3.0.8"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

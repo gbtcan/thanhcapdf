@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Content-Type" content="application/javascript; charset=utf-8">
+  <base href="/" />
+  <title>Hymn App</title>
+
+  <!-- Preload critical CSS to prevent FOUC (Flash of Unstyled Content) -->
+  <link rel="stylesheet" type="text/css" href="/src/index.css">
+  
+  <!-- Preload key assets -->
+  <link rel="modulepreload" href="/src/main.tsx">
+  
+  <!-- Set environment variables early to ensure they're available -->
+  <script type="text/javascript">
+    window.__ENV__ = {
+      VITE_SUPABASE_URL: 'https://fwoxlggleieoztmcvsju.supabase.co',
+      VITE_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3b3hsZ2dsZWllb3p0bWN2c2p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzMTY1OTUsImV4cCI6MjA1Njg5MjU5NX0.2I1OSvsQg0F6OEAeDSVSdIJfJWPPNjlLB7OhCaigEPI'
+    };
+  </script>
+  
+  <!-- Add a script to handle service worker cleanup -->
+  <script>
+    // Clean up problematic service workers
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations()
+        .then(registrations => {
+          for (let registration of registrations) {
+            registration.unregister();
+          }
+        });
+    }
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <!-- Make sure type="module" is properly set -->
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

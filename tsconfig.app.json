@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false // Changed from true to false to fix project reference emit issue
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

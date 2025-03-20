@@ -1,0 +1,193 @@
+.text-editor-container {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.dark .text-editor-container {
+  border-color: #374151;
+}
+
+.text-editor-toolbar {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.5rem;
+}
+
+.dark .text-editor-toolbar {
+  border-color: #374151;
+}
+
+.text-editor-content-container {
+  position: relative;
+  overflow-y: auto;
+}
+
+.text-editor-content {
+  padding: 1rem;
+  min-height: 200px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #1f2937;
+}
+
+.dark .text-editor-content {
+  color: #e5e7eb;
+  background-color: #111827;
+}
+
+.text-editor-wrapper {
+  height: 100%;
+}
+
+/* Draft.js editor overrides */
+.rdw-editor-main {
+  height: auto !important;
+  padding: 0 !important;
+}
+
+/* Dark mode for editor */
+.dark .rdw-editor-main,
+.dark .rdw-editor-toolbar,
+.dark .rdw-editor-wrapper {
+  background-color: #111827;
+  color: #e5e7eb;
+}
+
+.text-editor-content blockquote {
+  border-left: 4px solid #e2e8f0;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1rem;
+  color: #4b5563;
+}
+
+.dark .text-editor-content blockquote {
+  border-color: #4b5563;
+  color: #9ca3af;
+}
+
+.text-editor-content pre {
+  background-color: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  white-space: pre-wrap;
+  font-family: monospace;
+}
+
+.dark .text-editor-content pre {
+  background-color: #1f2937;
+  color: #e5e7eb;
+}
+
+/* Code block styling */
+.text-editor-content .code-block {
+  background-color: #f3f4f6;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.dark .text-editor-content .code-block {
+  background-color: #1f2937;
+}
+
+/* Inline code styling */
+.text-editor-content .inline-code {
+  background-color: #f3f4f6;
+  font-family: monospace;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.dark .text-editor-content .inline-code {
+  background-color: #1f2937;
+  color: #e5e7eb;
+}
+
+/* Link styling */
+.text-editor-content a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.dark .text-editor-content a {
+  color: #60a5fa;
+}
+
+/* Table styling */
+.text-editor-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.text-editor-content th,
+.text-editor-content td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem;
+}
+
+.dark .text-editor-content th,
+.dark .text-editor-content td {
+  border-color: #374151;
+}
+
+.text-editor-content th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+.dark .text-editor-content th {
+  background-color: #374151;
+}
+
+/* Image styling */
+.text-editor-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  display: block;
+}
+
+/* Placeholder text */
+.public-DraftEditorPlaceholder-root {
+  color: #9ca3af;
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  padding: 1rem;
+}
+
+.dark .public-DraftEditorPlaceholder-root {
+  color: #6b7280;
+}
+
+/* Focus state */
+.text-editor-content.focused {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Mentions styling */
+.rdw-mention-link {
+  text-decoration: none;
+  color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.1);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.dark .rdw-mention-link {
+  color: #60a5fa;
+  background-color: rgba(96, 165, 250, 0.2);
+}
+
+/* Toolbar button hover states for dark mode */
+.dark .rdw-option-wrapper:hover {
+  box-shadow: 1px 1px 0px #374151;
+  background-color: #1f2937;
+}
