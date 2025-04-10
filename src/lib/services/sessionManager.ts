@@ -1,88 +1,132 @@
-/**
- * Service for managing anonymous user sessions
- * Used for tracking views and other user activities without authentication
- */
-
-// Session ID storage key
-const SESSION_ID_KEY = 'anonymous_session_id';
-
-// Session expiry time (7 days)
-const SESSION_EXPIRY_DAYS = 7;
+import { Session } from '@supabase/supabase-js';
+import { supabaseClient } from '../supabase/client';
+import { STORAGE_KEYS } from '../../core/utils/storage';
 
 /**
- * Get the current session ID from localStorage or create a new one if none exists
- * @returns The current session ID
+ * Class to manage user authentication sessions
  */
-export function getOrCreateSessionId(): string {
-  // Check if we're in a browser environment
-  if (typeof window === 'undefined' || !window.localStorage) {
-    return generateSessionId(); // For SSR, generate a temporary ID
+export class SessionManager {
+  private static instance: SessionManager;
+  private currentSession: Session | null = null;
+  private listeners: ((session: Session | null) => void)[] = [];
+  
+  private constructor() {
+    this.initSession();
   }
   
-  // Try to get existing session ID
-  const existingId = window.localStorage.getItem(SESSION_ID_KEY);
-  const expiryTimestamp = window.localStorage.getItem(`${SESSION_ID_KEY}_expiry`);
+  /**
+   * Get singleton instance
+   */
+  public static getInstance(): SessionManager {
+    if (!SessionManager.instance) {
+      SessionManager.instance = new SessionManager();
+    }
+    return SessionManager.instance;
+  }
   
-  // If we have a valid, non-expired session ID, return it
-  if (existingId && expiryTimestamp) {
-    const expiry = parseInt(expiryTimestamp, 10);
-    if (!isNaN(expiry) && expiry > Date.now()) {
-      return existingId;
+  /**
+   * Initialize session from storage or Supabase auth
+   */
+  private async initSession(): Promise<void> {
+    try {
+      // Try to get session from Supabase
+      const { data, error } = await supabaseClient.auth.getSession();
+      
+      if (error) {
+        console.error('Error getting session:', error);
+        this.currentSession = null;
+      } else {
+        this.currentSession = data.session;
+      }
+      
+      // Set up auth state change listener
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        this.currentSession = session;
+        this.notifyListeners();
+        
+        // Handle session events
+        if (event === 'SIGNED_IN') {
+          console.log('User signed in');
+        } else if (event === 'SIGNED_OUT') {
+          console.log('User signed out');
+          // Clear any local auth-related data
+          localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+        } else if (event === 'TOKEN_REFRESHED') {
+          console.log('Token refreshed');
+        }
+      });
+    } catch (error) {
+      console.error('Error initializing session:', error);
+      this.currentSession = null;
     }
   }
   
-  // Otherwise, create a new session ID
-  const newSessionId = generateSessionId();
-  const expiry = Date.now() + (SESSION_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
-  
-  // Store the new session ID
-  window.localStorage.setItem(SESSION_ID_KEY, newSessionId);
-  window.localStorage.setItem(`${SESSION_ID_KEY}_expiry`, expiry.toString());
-  
-  return newSessionId;
-}
-
-/**
- * Generate a new random session ID
- * @returns A random session ID
- */
-function generateSessionId(): string {
-  // Simple UUID v4 generation
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
-/**
- * Clear the current session ID
- */
-export function clearSessionId(): void {
-  if (typeof window === 'undefined' || !window.localStorage) {
-    return;
+  /**
+   * Get current session
+   */
+  public getSession(): Session | null {
+    return this.currentSession;
   }
   
-  window.localStorage.removeItem(SESSION_ID_KEY);
-  window.localStorage.removeItem(`${SESSION_ID_KEY}_expiry`);
-}
-
-/**
- * Check if a session ID exists
- * @returns True if a session ID exists
- */
-export function hasSessionId(): boolean {
-  if (typeof window === 'undefined' || !window.localStorage) {
-    return false;
+  /**
+   * Get current user ID
+   */
+  public getUserId(): string | undefined {
+    return this.currentSession?.user?.id;
   }
   
-  return !!window.localStorage.getItem(SESSION_ID_KEY);
+  /**
+   * Check if user is authenticated
+   */
+  public isAuthenticated(): boolean {
+    return this.currentSession !== null;
+  }
+  
+  /**
+   * Add session change listener
+   */
+  public addListener(listener: (session: Session | null) => void): () => void {
+    this.listeners.push(listener);
+    
+    // Return unsubscribe function
+    return () => {
+      this.listeners = this.listeners.filter(l => l !== listener);
+    };
+  }
+  
+  /**
+   * Notify all listeners of session change
+   */
+  private notifyListeners(): void {
+    this.listeners.forEach(listener => {
+      try {
+        listener(this.currentSession);
+      } catch (error) {
+        console.error('Error in session listener:', error);
+      }
+    });
+  }
+  
+  /**
+   * Force refresh the session
+   */
+  public async refreshSession(): Promise<Session | null> {
+    try {
+      const { data, error } = await supabaseClient.auth.getSession();
+      
+      if (error) {
+        throw error;
+      }
+      
+      this.currentSession = data.session;
+      this.notifyListeners();
+      return this.currentSession;
+    } catch (error) {
+      console.error('Error refreshing session:', error);
+      return null;
+    }
+  }
 }
 
-export const sessionManager = {
-  getOrCreateSessionId,
-  clearSessionId,
-  hasSessionId
-};
-
-export default sessionManager;
+// Export singleton instance
+export const sessionManager = SessionManager.getInstance();

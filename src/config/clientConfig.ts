@@ -1,62 +1,50 @@
 /**
- * Central configuration for client-side features and behavior
+ * Client-side configuration
  */
 
-// Application information
-export const APP_INFO = {
-  name: 'Catholic Hymn Book',
-  version: '1.0.0',
-  description: 'Explore, share, and download Catholic hymns and music sheets'
-};
-
-// PDF.js version used throughout the application
-export const PDF_JS_VERSION = '3.4.120';
-
-// Settings for different environments
-const environments = {
-  development: {
-    apiUrl: 'http://localhost:3000',
-    cdnUrl: '',
-    clientSideOnly: true
+export const CLIENT_CONFIG = {
+  app: {
+    name: 'ThánhCaPDF',
+    version: '1.0.0',
+    description: 'Kho tàng thánh ca Việt Nam',
+    url: import.meta.env.VITE_APP_URL || 'https://thanhcapdf.com',
+    logoUrl: '/assets/logo.svg',
   },
-  staging: {
-    apiUrl: 'https://staging-api.example.com',
-    cdnUrl: 'https://staging-cdn.example.com',
-    clientSideOnly: false
+  api: {
+    baseUrl: import.meta.env.VITE_API_URL || '',
+    timeout: 30000, // 30 seconds
   },
-  production: {
-    apiUrl: 'https://api.example.com',
-    cdnUrl: 'https://cdn.example.com',
-    clientSideOnly: false
-  }
+  supabase: {
+    url: import.meta.env.VITE_SUPABASE_URL || '',
+    anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+    storageBucket: 'resources',
+  },
+  features: {
+    darkMode: true,
+    offlineMode: true,
+    comments: true,
+    pdfViewer: true,
+    audioPlayer: true,
+    sharing: true,
+    search: true,
+    favorites: true,
+    community: true,
+  },
+  pagination: {
+    defaultSize: 10,
+    homeHighlights: 6,
+    searchResults: 20,
+    comments: 5,
+  },
+  social: {
+    facebook: 'https://facebook.com/thanhcapdf',
+    youtube: 'https://youtube.com/thanhcapdf',
+    email: 'contact@thanhcapdf.com',
+  },
 };
 
-// Determine current environment
-const currentEnv = import.meta.env.MODE || 'development';
-
-// Feature flags - control which features are enabled
-export const FEATURES = {
-  viewCounting: import.meta.env.VITE_ENABLE_VIEW_TRACKING === 'true',
-  pdfViewsTracking: import.meta.env.VITE_ENABLE_VIEW_TRACKING === 'true',
-  categoriesEnabled: true,
-  forumFeatures: import.meta.env.VITE_ENABLE_FORUM === 'true',
-  analytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
+export const ENV_CONFIG = {
+  isProd: import.meta.env.PROD,
+  isDev: import.meta.env.DEV,
+  isTest: import.meta.env.MODE === 'test',
 };
-
-// Default values for missing data
-export const DEFAULTS = {
-  viewCount: 3,
-  pdfViewCount: 5,
-  reactionCount: 2,
-  placeholderImage: '/images/placeholder.jpg'
-};
-
-// Export the complete client configuration
-export const clientConfig = {
-  ...APP_INFO,
-  ...environments[currentEnv as keyof typeof environments],
-  features: FEATURES,
-  defaults: DEFAULTS
-};
-
-export default clientConfig;

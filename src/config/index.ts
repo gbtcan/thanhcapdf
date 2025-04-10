@@ -1,6 +1,8 @@
-// Re-export all configuration
-
-export { default as clientConfig, APP_INFO, FEATURES, DEFAULTS, PDF_JS_VERSION } from './clientConfig';
+/**
+ * Export all configuration
+ */
+export * from './clientConfig';
+export * from './routes';
 
 // Add other configuration exports here as they're created
 // export { default as apiConfig } from './apiConfig';

@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { UserRole } from '../types/users';
+import { getTableName, safeQueryBuilder } from '../utils/tableMapper';
 
 /**
  * Fetch all users
@@ -235,3 +236,72 @@ export async function getTopContributors(limit: number = 5) {
     throw error;
   }
 }
+
+/**
+ * Get user profile by ID with proper table handling
+ */
+export async function getUserById(userId: string) {
+  try {
+    // Use the safe query builder to get the correct table
+    const query = await safeQueryBuilder('profiles');
+    
+    const { data, error } = await query
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle();
+    
+    if (error) {
+      console.error('Error fetching user profile:', error);
+      return null;
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Error in getUserById:', error);
+    return null;
+  }
+}
+
+/**
+ * Get current user's profile with proper table handling
+ */
+export async function getCurrentUserProfile() {
+  try {
+    const { data: authData } = await supabase.auth.getUser();
+    if (!authData?.user) return null;
+    
+    return getUserById(authData.user.id);
+  } catch (error) {
+    console.error('Error getting current user profile:', error);
+    return null;
+  }
+}
+
+/**
+ * Update user profile with proper table handling
+ */
+export async function updateUserProfile(userId: string, profileData: any) {
+  try {
+    // Get the correct profiles table name
+    const profilesTable = await getTableName('profiles');
+    
+    const { data, error } = await supabase
+      .from(profilesTable)
+      .update(profileData)
+      .eq('id', userId)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
+  }
+}
+
+export default {
+  getUserById,
+  getCurrentUserProfile,
+  updateUserProfile
+};

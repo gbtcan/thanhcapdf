@@ -1,4 +1,15 @@
 /**
+ * This file sets global configuration that needs to be loaded
+ * before any other imports
+ */
+
+// Set React Router future flags
+window.__reactRouterFutureFlags = {
+  v7_startTransition: true,
+  v7_relativeSplatPath: true
+};
+
+/**
  * This file executes before React initialization to ensure environment setup
  */
 

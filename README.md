@@ -362,3 +362,28 @@ project/
 │   └── migrations/           # Database migration scripts
 │
 └── docs/                     # Documentation
+
+Hoàn thiện tính năng offline:
+
+Implement service worker
+Hoàn thiện IndexedDB và caching strategy
+Xây dựng synchronization mechanism
+Tối ưu hóa hiệu suất:
+
+Implement code splitting
+Thêm memoization cho components phức tạp
+Optimize bundle size
+Cải thiện trải nghiệm người dùng:
+
+Hoàn thiện accessibility
+Thêm skeleton loading screens
+Cải thiện responsive design
+Hoàn thiện documentation:
+
+Thêm JSDoc cho functions và components
+Viết README.md chi tiếtHoàn thiện documentation:
+
+Thêm JSDoc cho functions và components
+Viết README.md chi tiết
+Tạo hướng dẫn phát triển
+Tạo hướng dẫn phát triển

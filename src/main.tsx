@@ -1,17 +1,40 @@
+// Import bootstrap first to ensure flags are set before any React Router imports
+import './bootstrap';
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { ThemeProvider } from './core/contexts/ThemeContext';
+import { AuthProvider } from './core/contexts/AuthContext';
+import { NotificationProvider } from './core/contexts/NotificationContext';
 import './index.css';
-import { installViteErrorHandler } from './utils/fixViteConnection';
+import { setupConsoleErrorFilter } from './core/utils/error-logger';
+import { ENV_CONFIG } from './config/appConfig';
 
-// Install error handler to fix connection issues
-if (import.meta.env.DEV) {
-  installViteErrorHandler();
+// Khởi tạo bộ lọc lỗi console trước khi ứng dụng khởi động
+setupConsoleErrorFilter();
+
+// Error tracking setup
+if (ENV_CONFIG.isProduction) {
+  console.info('Production mode - error tracking enabled');
+  
+  window.onerror = (message, source, lineno, colno, error) => {
+    console.error('Global error:', { message, source, lineno, colno, error });
+    // Send to error tracking service
+  };
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
-root.render(
+/**
+ * Application entry point
+ */
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <AuthProvider>
+      <ThemeProvider>
+        <NotificationProvider>
+          <App />
+        </NotificationProvider>
+      </ThemeProvider>
+    </AuthProvider>
+  </React.StrictMode>,
 );
